@@ -41,12 +41,28 @@ class ViewController: UIViewController {
     
     var addToConstraint = true
     
-    var seconds: Int = 00 {
+    var seconds: Int = 0 {
         didSet {
-            timerLabel.text = ("\(minutes):\(seconds)")
+            if seconds < 10 && minutes < 10 {
+            timerLabel.text = ("0\(minutes):0\(seconds)")
+            } else if seconds < 10 && minutes >= 10 {
+                timerLabel.text = ("\(minutes):0\(seconds)")
+            } else {
+                timerLabel.text = ("0\(minutes):\(seconds)")
+            }
         }
     }
-    var minutes: Int = 00
+    
+    var minutes: Int = 0 {
+        didSet {
+            if minutes < 10 {
+                timerLabel.text = ("0\(minutes):0\(seconds)")
+            } else {
+                timerLabel.text = ("\(minutes):0\(seconds)")
+            }
+        }
+    }
+    
     var hours: Int = 0
     
     override func viewDidLoad() {
