@@ -64,10 +64,17 @@ class ViewController: UIViewController {
     }
     
     var hours: Int = 0
-    
+    //MARK:- ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         checkDeviceType()
+        configureView()
+    }
+    private func configureView() {
+        timerLabel.backgroundColor = .systemGray2
+        timerLabel.layer.cornerRadius = 4
+        timerLabel.clipsToBounds = true
+        timerLabel.textColor = .white
     }
     @IBAction func changeScore(_ sender: UISwitch) {
         currentScore += 1
