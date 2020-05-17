@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     var timerIsPaused: Bool = true
     var timer = Timer()
     
+    var addToConstraint = true
+    
     var seconds: Int = 00 {
         didSet {
             timerLabel.text = ("\(minutes):\(seconds)")
@@ -60,15 +62,26 @@ class ViewController: UIViewController {
         }
     }
     private func moveSwitch() {
-        var addToConstraint = true
-        if switchYConstraint.constant <= 10 {
-            UIView.animate(withDuration: 0.0, delay: 0.0, options: [], animations: {
-                self.switchYConstraint.constant += 1
-            })
-        } else {
-            UIView.animate(withDuration: 0.0, delay: 0.0, options: [], animations: {
-                self.switchYConstraint.constant -= 1
-            })
+        if addToConstraint {
+            if switchYConstraint.constant <= 25 {
+                print(switchYConstraint.constant)
+                UIView.animate(withDuration: 0.1, delay: 0.0, options: [.allowUserInteraction], animations: {
+                    self.switchYConstraint.constant += 5
+                    self.view.layoutIfNeeded()
+                })
+            } else if switchYConstraint.constant >= 25 {
+                addToConstraint = false
+            }
+        }
+        if addToConstraint == false {
+            if switchYConstraint.constant >= -25 {
+                UIView.animate(withDuration: 0.1, delay: 0.0, options: [.allowUserInteraction], animations: {
+                    self.switchYConstraint.constant -= 5
+                    self.view.layoutIfNeeded()
+                })
+            } else if switchYConstraint.constant <= -25 {
+                addToConstraint = true
+            }
         }
     }
 }
