@@ -12,9 +12,29 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var centerSwitch: UISwitch!
+    @IBOutlet weak var currentScoreLabel: UILabel!
+    @IBOutlet weak var highScoreLabel: UILabel!
+    @IBOutlet weak var startTimerButton: UIButton!
+    
 
     @IBOutlet weak var switchYConstraint: NSLayoutConstraint!
     
+    var currentScore: Int = 0 {
+        didSet {
+            if currentScore >= highScore {
+                highScore = currentScore
+            }
+            currentScoreLabel.text = ("Current Score: \(currentScore)")
+        }
+    }
+    
+    var highScore: Int = 0 {
+        didSet {
+            if currentScore >= highScore {
+                highScoreLabel.text = ("High Score: \(highScore)")
+            }
+        }
+    }
     
     var timerIsPaused: Bool = true
     var timer = Timer()
@@ -33,14 +53,24 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
     }
+    @IBAction func changeScore(_ sender: UISwitch) {
+        currentScore += 1
+    }
+    @IBAction func resetCurrentScoreButtonPressed(_ sender: UIButton) {
+        currentScore = 0
+    }
+    
     @IBAction func startTimerButtonPressed1(_ sender: UIButton) {
         startTimer()
-        print("Start")
+        if timerIsPaused {
+            startTimerButton.setTitle("Start", for: .normal)
+        } else {
+            startTimerButton.setTitle("Stop", for: .normal)
+        }
     }
 
-    
+    // Function that starts the timer
     private func startTimer() {
-        print(timerIsPaused)
         timerIsPaused.toggle()
         if timerIsPaused == false {
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { tempTimer in
@@ -61,10 +91,10 @@ class ViewController: UIViewController {
             timer.invalidate()
         }
     }
+    // Animation block to move switch each second
     private func moveSwitch() {
         if addToConstraint {
             if switchYConstraint.constant <= 25 {
-                print(switchYConstraint.constant)
                 UIView.animate(withDuration: 0.1, delay: 0.0, options: [.allowUserInteraction], animations: {
                     self.switchYConstraint.constant += 5
                     self.view.layoutIfNeeded()
